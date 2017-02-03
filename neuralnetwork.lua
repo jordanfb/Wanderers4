@@ -45,6 +45,11 @@ function NeuralNetwork:makeRandomLayers()
 end
 
 function NeuralNetwork:includeStateVector(inputs)
+	if #self.state_vector == 0 then
+		for i = 1, self.num_passthroughs do
+			self.state_vector[i] = 0
+		end
+	end
 	for i = 1, self.num_passthroughs do
 		inputs[#inputs+1] = self.state_vector[i]
 	end
@@ -93,10 +98,12 @@ end
 
 function NeuralNetwork:serialize()
 	-- a simple string serialize that, while not optimized for size, it is optimized for programmer time / cross compatibility.
+	-- note that I put "statevectors" as plural to fit with the pattern of opening with a plural form, but perhaps should be
+	-- changed in a future version
 	local output = "net ".."num_inputs "..self.num_inputs.." num_layers "..self.num_layers
 	output = output .. " layer_width "..self.layer_width .. " num_outputs "..self.num_outputs
 	output = output .. " num_passthroughs " .. self.num_passthroughs
-	output = output .. " " .. self:serializeStateVector() .. " layers"
+	output = output .. " statevectors " .. self:serializeStateVector() .. " layers"
 	for i = 1, #self.layers do
 		output = output .. " " .. self.layers[i]:serialize()
 	end
@@ -134,7 +141,7 @@ function NeuralNetwork:unserialize(text)
 			state = 4
 		elseif text[i] == "num_passthroughs" then
 			state = 5
-		elseif text[i] == "statevector" then
+		elseif text[i] == "statevectors" then
 			state = 6
 		elseif text[i] == "layers" then
 			state = 7
