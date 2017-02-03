@@ -1,7 +1,6 @@
 io.stdout:setvbuf("no") -- this is so that sublime will print things when they come (rather than buffering).
 
-
-
+require "neuralnetwork"
 require "game"
 require "class"
 
@@ -10,6 +9,17 @@ local game = Game()
 
 
 function love.load(args)
+	-- this is a test here for the serialization of the NN:
+	n = NeuralNetwork(10, 5, 4, 2, 5)
+	x = n:serialize()
+	print(x)
+	print()
+	m = NeuralNetwork(x)
+	y = m:serialize()
+	print(y)
+	love.event.quit()
+
+
 	
 	game:load(args)
 	--local width, height = 512, 256

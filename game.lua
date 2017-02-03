@@ -1,5 +1,5 @@
 
-require "mainmenu"
+-- require "mainmenu"
 
 require "class"
 
@@ -15,10 +15,10 @@ function Game:_init()
 	-- here are the actual variables
 	self.drawFPS = true
 
-	self.mainMenu = MainMenu(self)
+	-- self.mainMenu = MainMenu(self)
 	self.screenStack = {}
 	
-	self:addToScreenStack(self.mainMenu)
+	-- self:addToScreenStack(self.mainMenu)
 end
 
 function Game:load(args)
