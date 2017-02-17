@@ -40,6 +40,15 @@ function Neuron:sigma_activation(inputSum)
 	return 1/(1+math.exp(-inputSum))
 end
 
+function Neuron:mutate(chance)
+	-- runs through all weights and mutates chance% of them to a random new weight.
+	for i = 1, self.num_inputs do
+		if math.random() < chance then
+			self.weights[i] = 2*math.random()-1
+		end
+	end
+end
+
 function Neuron:serialize()
 	local output = "neuron neuron_inputs " .. self.num_inputs .. " weights"
 	for i = 1, #self.weights do

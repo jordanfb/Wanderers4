@@ -26,6 +26,16 @@ function NeuralNetwork:_init(num_inputs, num_layers, layer_width, num_outputs, n
 	end
 end
 
+function NeuralNetwork:resetStateVector(value)
+	-- sets everything to one, or the value passed in.
+	if value == nil then
+		value = 1
+	end
+	for i = 1, self.num_passthroughs do
+		self.state_vector[i] = value
+	end
+end
+
 function NeuralNetwork:makeRandomLayers()
 	if self.num_layers < 1 then
 		return
@@ -56,7 +66,7 @@ function NeuralNetwork:includeStateVector(inputs)
 	return inputs
 end
 
-function NeuralNetwork:setStateVector(inputs)
+function NeuralNetwork:keepStateVector(inputs)
 	-- this sets the state vector from the output of the last layer of neural nets.
 	self.state_vector = {}
 	for i = self.num_outputs+1, #inputs do
@@ -71,8 +81,15 @@ function NeuralNetwork:update(inputs)
 		inputs = self.layers[i]:update(inputs)
 	end
 	-- it returns the outputs combined with the state vector, just cause visualizations? and cause I'm too lazy to remove it.
-	self:setStateVector(inputs) -- record the state vector in itself in order to remember it for future updates.
+	self:keepStateVector(inputs) -- record the state vector in itself in order to remember it for future updates.
 	return inputs
+end
+
+function NeuralNetwork:mutate(chance)
+	-- runs through all neurons' weights and mutates chance% of them to a random new weight.
+	for k, v in pairs(self.layers) do
+		v:mutate(chance)
+	end
 end
 
 function NeuralNetwork:serializeStateVector()

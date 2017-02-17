@@ -35,6 +35,13 @@ function Layer:update(inputs)
 	return outputs
 end
 
+function Layer:mutate(chance)
+	-- runs through all neurons' weights and mutates chance% of them to a random new weight.
+	for k, v in pairs(self.neurons) do
+		v:mutate(chance)
+	end
+end
+
 function Layer:serialize()
 	local output = "layer num_neurons " .. self.num_neurons .. " inputs_per_neuron " .. self.inputs_per_neuron .. " neurons"
 	for i = 1, #self.neurons do
